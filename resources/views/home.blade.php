@@ -16,7 +16,7 @@
         <!-- product promo -->
         <div class="col-md-8 col-12 pb-4">
             @foreach ($productPromo as $key => $val)
-                 <div class="image-container pb-3 product-list" product-name="{{ $val->title }}">
+                 <div class="image-container pb-3 product-list" onclick="window.location='{{ route("home.show", $val->id) }}'" product-name="{{ $val->title }}">
                     <div class="card">
                         <img src="{{ @$val->imageUrl }}" data-toggle="modal" data-target="#product-detail-{{ $val->id }}" class="rounded p-2 img-fluid" style="width: 100%;" alt="{{ $val->title }}">
                         <span id="heart" class="heart fa-position-bottom-right"><i class="fa fa-heart-o" aria-hidden="true" ></i> </span>
@@ -30,7 +30,7 @@
 </div>
 @endsection
 
-@push('modal')
+{{--@push('modal')
 @foreach ($productPromo as $key => $val)
 <div class="modal fade" id="product-detail-{{ $val->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -58,7 +58,7 @@
     </div>
 </div>
 @endforeach
-@endpush
+@endpush--}}
 
 @push('scripts')
 <script type="text/javascript">

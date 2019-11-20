@@ -17,7 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+$router->group(['middleware' => 'auth'], function() use ($router) {
+    $router->get('/home', ['as' => 'home', 'uses' => 'HomeController@index']);
+    $router->get('/show/{id}', ['as' => 'home.show', 'uses' => 'HomeController@show']);
+    $router->get('/buy/{id}', ['as' => 'home.buy', 'uses' => 'HomeController@buyItem']);
+    
+    $router->get('/cart', ['as' => 'cart', 'uses' => 'CartController@index']);
+});
 
 $router->group(['as' => 'google::', 'namespace' => 'Auth\Google'], function() use ($router) {
     $router->get('/redirect', 'SocialAuthGoogleController@redirect');

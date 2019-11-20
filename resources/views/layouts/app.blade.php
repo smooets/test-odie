@@ -31,6 +31,7 @@
 </head>
 <body>
     <div id="app">
+        @if (Request::segment(1) != 'show')
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <!-- <a class="navbar-brand" href="{{ url('/') }}">
@@ -62,7 +63,7 @@
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
-                                    </a>
+                                    </a> 
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
@@ -73,11 +74,18 @@
                     </ul>
                 </div> -->
                 @if (Request::segment(1) == 'filter')
-                    <button type="button" class="close" onclick="window.location='{{ route("home") }}'" aria-label="Close" style="position: absolute; z-index: 1; padding-left: 4px;">
+                    <button type="button" class="close" onclick="window.location='{{ url()->previous() }}'" aria-label="Close" style="position: absolute; z-index: 1; padding-left: 4px;">
                         <span aria-hidden="true">&larr;</span>
                     </button>
                     <form class="form-inline col-12 pr-0 pl-5">
                         <input id="filter" class="form-control" style="width: 100%; border-radius: 50px;" type="search" placeholder="Search" aria-label="Search">
+                    </form>
+                @elseif (Request::segment(1) == 'cart')
+                    <button type="button" class="close" onclick="window.location='{{ url()->previous() }}'" aria-label="Close" style="position: absolute; z-index: 1; padding-left: 4px;">
+                        <span aria-hidden="true">&larr;</span>
+                    </button>
+                    <form class="form-inline col-12 pr-0 pl-5" onclick="window.location='{{ route("filter.index") }}'">
+                        Purchase History
                     </form>
                 @else
                     <span class="pl-2" style="position: absolute;"><i class="fa fa-heart-o" aria-hidden="true" ></i> </span>
@@ -87,6 +95,7 @@
                 @endif
             </div>
         </nav>
+        @endif
 
         <main class="py-4">
             @yield('content')
@@ -108,17 +117,17 @@
                     <a class="nav-link" href="#">Profile</a>
                 </li>
             </ul> -->
-            <div class="col-3 pl-0 pr-0">
-                <button class="btn btn-block text-white font-weight-bold pl-0 pr-0">Home</button>
+            <div class="col-3 pl-0 pr-0" onclick="window.location='{{ route("home") }}'">
+                <button class="btn btn-block text-white pl-0 pr-0">Home</button>
             </div>
             <div class="col-3 pl-0 pr-0">
                 <button class="btn btn-block text-white pl-0 pr-0">Feed</button>
             </div>
             <div class="col-3 pl-0 pr-0">
-                <button class="btn btn-block text-white pl-0 pr-0">Cart</button>
+                <button class="btn btn-block text-white pl-0 pr-0" onclick="window.location='{{ route("cart") }}'">Cart</button>
             </div>
             <div class="col-3 pl-0 pr-0">
-                <button class="btn btn-block text-white pl-0 pr-0">Profile</button>
+                <button class="btn btn-block text-white pl-0 pr-0" onclick="window.location='{{ route("cart") }}'">Profile</button>
             </div>
         </nav>
         @endauth

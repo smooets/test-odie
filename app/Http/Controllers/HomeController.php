@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\RequestException;
+use Session;
 
 class HomeController extends Controller
 {
@@ -16,13 +17,14 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
         $this->client = new Client([
             'base_uri' => env('API_URL')
         ]);
 
+        $this->title = null;
+
         view()->share([
-            'title' => "Sehat Q | Home Page",
+            'title' => $this->title,
         ]);
     }
 
@@ -34,11 +36,11 @@ class HomeController extends Controller
     public function index()
     {
         try {
-            $req = $this->client->get('/home');
+            $this->title = "Sehat Q | Home Page";
+            $getData = $this->getData();
 
-            $res = json_decode($req->getBody());
-            $category = current($res)->data->category;
-            $productPromo = current($res)->data->productPromo;
+            $category = current($getData)->data->category;
+            $productPromo = current($getData)->data->productPromo;
 
             return view('home')->with([
                 'category' => $category,
@@ -51,5 +53,46 @@ class HomeController extends Controller
                 echo Psr7\str($e->getResponse());
             }
         }
+    }
+
+    public function show($id) 
+    {
+        $this->title = "Sehat Q | Detail";
+        $result = $this->getItemProduct($id);
+
+        return view('detail')->with([
+            'productPromo' => $result
+        ]);
+    }
+
+    public function getData()
+    {
+        $req = $this->client->get('/home');
+
+        $response = json_decode($req->getBody());
+
+        return $response;
+    }
+
+    public function getItemProduct($id)
+    {
+        $getData = $this->getData();
+        $productPromo = current($getData)->data->productPromo;
+
+        foreach ($productPromo as $val) {
+            if ($val->id == $id) {
+                $result = $val;
+            }
+        }
+
+        return $result;
+    }
+
+    public function buyItem($id)
+    {
+        $item = $this->getItemProduct($id);
+        Session::push('cart', (array) $item);
+
+        return redirect()->route('home');
     }
 }
