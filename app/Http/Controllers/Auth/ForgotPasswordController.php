@@ -28,5 +28,9 @@ class ForgotPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+
+        view()->share([
+            'title' => "Sehat Q | Forgot Password",
+        ]);
     }
 }

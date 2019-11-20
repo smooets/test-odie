@@ -28,3 +28,9 @@ $router->group(['as' => 'facebook::', 'namespace' => 'Auth\Facebook'], function(
     $router->get('/facebook-redirect', 'SocialAuthFacebookController@redirect');
     $router->get('/facebook-callback', 'SocialAuthFacebookController@callback');
 });
+
+$router->get('/filter', [
+    'as' => 'filter.index',
+    'uses' => 'FilterController@index',
+    'middleware' => 'auth'
+]);

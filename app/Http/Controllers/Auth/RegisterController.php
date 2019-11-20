@@ -38,6 +38,9 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        view()->share([
+            'title' => "Sehat Q | Register",
+        ]);
     }
 
     /**
